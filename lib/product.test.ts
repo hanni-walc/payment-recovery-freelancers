@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildRecoveryPlan,
   buildRecoverySummary,
   buildReminderSequence,
   buildInvoiceToneGuide,
@@ -25,6 +26,17 @@ describe('buildRecoverySummary', () => {
     expect(summary.overdueCount).toBeGreaterThan(0);
     expect(summary.recoveredAmount).toBeGreaterThan(0);
     expect(summary.nextBestAction).toContain('follow-up');
+  });
+});
+
+describe('buildRecoveryPlan', () => {
+  it('prioritizes the oldest overdue invoice and keeps the CTA explicit', () => {
+    const plan = buildRecoveryPlan(sampleInvoices, sampleRecoverySettings);
+
+    expect(plan[0].invoiceId).toBe('inv-101');
+    expect(plan[0].priority).toBe('critical');
+    expect(plan[0].recommendedAction).toContain('Pay now');
+    expect(plan.map((step) => step.invoiceId)).toEqual(['inv-101', 'inv-104', 'inv-102']);
   });
 });
 

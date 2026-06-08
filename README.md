@@ -1,60 +1,20 @@
 # Payment Recovery for Freelancers
 
-Repo: `payment-recovery-freelancers`
+A polished Next.js product slice for freelancers and small service businesses who need to recover overdue payments without sounding robotic.
 
-## One-line pitch
-Automate polite payment reminders that recover money without manual chasing.
+## What it does
+- Prioritizes overdue invoices by urgency and value
+- Generates polite reminder sequences
+- Surfaces the best next action for recovery work
+- Shows a responsive dashboard, invoices board, reminder library, templates, settings, and login flow
+- Exposes a `/api/health` route for deployment checks
 
-## Buyer
-consultants, freelancers, small service businesses
-
-## Pain
-Late invoices and awkward follow-ups hurt cash flow.
-
-## Monetization
-Subscription with a premium recovered-payment tier.
-
-## Differentiator
-Tone-controlled reminder sequences that feel human, not spammy.
-
-## What ships in v1
-- Import invoices
-- Schedule reminders
-- Send payment links
-- Track outcomes
-- Respectful template presets
-- Mobile-friendly dashboard
-
-## Screens
-- Invoice dashboard
-- Reminder sequence editor
-- Overdue queue
-- Invoice detail
-- Email template library
-- Settings
-
-## Routes
-- `/`
-- `/login`
-- `/app`
-- `/app/invoices`
-- `/app/reminders`
-- `/app/templates`
-- `/app/settings`
-
-## Deployment
-Vercel, Supabase/Neon, Stripe billing, Resend email, S3 for invoice attachments.
-
-## Launch checklist
-- Write copy focused on getting paid faster
-- Add a simple setup wizard
-- Include example reminder sequences
-
-## v2
-- SMS reminders
-- Client portal
-- Partial payment plans
-- Invoice reconciliation
+## Stack
+- Next.js 15
+- React 19
+- TypeScript
+- Vitest
+- ESLint
 
 ## Local development
 ```bash
@@ -62,12 +22,45 @@ pnpm install
 pnpm dev
 ```
 
-## Environment variables
-Copy `.env.example` and fill in the provider keys for auth, storage, email, and billing.
+## Scripts
+- `pnpm dev` — start the app locally
+- `pnpm test` — run the business-logic tests
+- `pnpm run lint` — run ESLint
+- `pnpm run build` — production build
+- `pnpm run typecheck` — TypeScript check only
 
-## Files that matter
-- `app/page.tsx`
-- `app/app/page.tsx`
-- `app/api/health/route.ts`
-- `lib/product.ts`
-- `.github/workflows/ci.yml`
+## Environment variables
+Copy `.env.example` to `.env.local` and add your provider keys.
+
+Required for a real deployment:
+- `NEXT_PUBLIC_APP_URL`
+- `DATABASE_URL`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `RESEND_API_KEY`
+- `S3_BUCKET`
+- `S3_ACCESS_KEY_ID`
+- `S3_SECRET_ACCESS_KEY`
+
+## Product slice included in this repo
+- Marketing home page
+- App dashboard
+- Invoice board
+- Reminder sequence view
+- Template library
+- Settings page
+- Login page
+- Health endpoint
+
+## Deployment notes
+- Works well on Vercel
+- Add your production environment variables before deployment
+- Use the health route for uptime checks
+
+## Verification
+Run this before shipping:
+```bash
+pnpm test
+pnpm run lint
+pnpm run build
+```

@@ -2,11 +2,11 @@ import { sampleTemplates } from '../../../lib/product';
 
 export default function TemplatesPage() {
   return (
-    <main className="shell">
+    <main className="shell page-grid">
       <section className="frame hero">
         <p className="eyebrow">Templates</p>
         <h1>Choose the right tone for the right invoice.</h1>
-        <p className="lead">The template library keeps the follow-up human while still making payment feel urgent enough to act on.</p>
+        <p className="lead">The template library keeps follow-ups human while still making payment feel urgent enough to act on.</p>
       </section>
 
       <section className="grid cols-2">

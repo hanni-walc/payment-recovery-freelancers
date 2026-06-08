@@ -1,6 +1,6 @@
 export default function LoginPage() {
   return (
-    <main className="shell">
+    <main className="shell page-grid login-grid">
       <section className="frame hero">
         <p className="eyebrow">Sign in</p>
         <h1>Enter the payment recovery workspace.</h1>
@@ -8,20 +8,24 @@ export default function LoginPage() {
       </section>
 
       <section className="card">
-        <div className="grid cols-2">
-          <label className="card" style={{ padding: 16 }}>
-            <p className="kicker">Email</p>
-            <input className="input" placeholder="you@studio.com" />
+        <form className="form-grid">
+          <label className="field">
+            <span className="kicker">Email</span>
+            <input className="input" type="email" placeholder="you@studio.com" />
           </label>
-          <label className="card" style={{ padding: 16 }}>
-            <p className="kicker">Password</p>
+          <label className="field">
+            <span className="kicker">Password</span>
             <input className="input" placeholder="••••••••" type="password" />
           </label>
-        </div>
-        <div className="row" style={{ marginTop: 16 }}>
-          <a className="button" href="/app">Continue</a>
-          <a className="ghost" href="/">Back to home</a>
-        </div>
+          <div className="row">
+            <button className="button" type="button">
+              Continue
+            </button>
+            <a className="ghost" href="/">
+              Back to home
+            </a>
+          </div>
+        </form>
       </section>
     </main>
   );

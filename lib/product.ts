@@ -34,13 +34,25 @@ export type ToneGuide = {
   cta: string;
 };
 
+export type RecoveryPlanPriority = 'critical' | 'high' | 'medium' | 'low';
+
+export type RecoveryPlanItem = {
+  invoiceId: string;
+  client: string;
+  priority: RecoveryPlanPriority;
+  daysPastDue: number;
+  recommendedAction: string;
+  estimatedRecoveryValue: number;
+  nextTouchpoint: string;
+};
+
 export const TITLE = 'Payment Recovery for Freelancers';
 export const PROMISE = 'Automate polite payment reminders that recover money without manual chasing.';
 export const BUYER = 'consultants, freelancers, small service businesses';
 export const PAIN = 'Late invoices and awkward follow-ups hurt cash flow.';
 export const PRICING = 'Subscription with a premium recovered-payment tier.';
 export const WEDGE = 'Tone-controlled reminder sequences that feel human, not spammy.';
-export const DEPLOY = 'Vercel, Supabase/Neon, Stripe billing, Resend email, S3 for invoice attachments.';
+export const DEPLOY = 'Vercel, Supabase or Neon, Stripe billing, Resend email, S3 for invoice attachments.';
 export const MVP = [
   'Import invoices',
   'Schedule reminders',
@@ -81,6 +93,78 @@ export const sampleTemplates = [
   { name: 'Final notice', tone: 'final', subject: 'Final reminder before escalation' },
 ];
 
+const priorityWeight: Record<RecoveryPlanPriority, number> = {
+  critical: 4,
+  high: 3,
+  medium: 2,
+  low: 1,
+};
+
+function formatMoney(amount: number, currencySymbol: string) {
+  return `${currencySymbol}${amount.toLocaleString('en-US')}`;
+}
+
+function getPriority(invoice: Invoice): RecoveryPlanPriority {
+  if (invoice.status === 'overdue' && invoice.daysPastDue >= 14) return 'critical';
+  if (invoice.status === 'overdue') return 'high';
+  if (invoice.status === 'due-soon') return 'medium';
+  return 'low';
+}
+
+function getRecommendedAction(invoice: Invoice, settings: RecoverySettings, priority: RecoveryPlanPriority) {
+  const amount = formatMoney(invoice.amount, settings.currency);
+
+  switch (priority) {
+    case 'critical':
+      return `${settings.payNowCta} today and escalate if there is no response within 24 hours. Outstanding balance: ${amount}.`;
+    case 'high':
+      return `Send a direct follow-up and keep the ${settings.payNowCta.toLowerCase()} link visible. Outstanding balance: ${amount}.`;
+    case 'medium':
+      return `Preempt the due date with a polite reminder and make ${settings.payNowCta.toLowerCase()} easy. Amount due: ${amount}.`;
+    default:
+      return `Keep the invoice ready, but wait for the next scheduled touchpoint before following up. Amount due: ${amount}.`;
+  }
+}
+
+function getNextTouchpoint(invoice: Invoice, priority: RecoveryPlanPriority, delayDays: number) {
+  if (invoice.status === 'overdue') {
+    return priority === 'critical' ? 'Within 24 hours' : `In ${delayDays} day${delayDays === 1 ? '' : 's'}`;
+  }
+
+  if (invoice.status === 'due-soon') {
+    return 'Before the due date';
+  }
+
+  return 'On hold';
+}
+
+export function buildRecoveryPlan(invoices: Invoice[], settings: RecoverySettings): RecoveryPlanItem[] {
+  return [...invoices]
+    .filter((invoice) => invoice.status !== 'paid')
+    .sort((left, right) => {
+      const leftPriority = getPriority(left);
+      const rightPriority = getPriority(right);
+      const weightDifference = priorityWeight[rightPriority] - priorityWeight[leftPriority];
+      if (weightDifference !== 0) return weightDifference;
+      if (left.daysPastDue !== right.daysPastDue) return right.daysPastDue - left.daysPastDue;
+      return right.amount - left.amount;
+    })
+    .map((invoice, index) => {
+      const priority = getPriority(invoice);
+      const delayDays = settings.defaultDelayDays + index;
+
+      return {
+        invoiceId: invoice.id,
+        client: invoice.client,
+        priority,
+        daysPastDue: invoice.daysPastDue,
+        recommendedAction: getRecommendedAction(invoice, settings, priority),
+        estimatedRecoveryValue: invoice.amount,
+        nextTouchpoint: getNextTouchpoint(invoice, priority, delayDays),
+      };
+    });
+}
+
 export function buildReminderSequence(invoices: Invoice[], settings: RecoverySettings): ReminderStep[] {
   return [...invoices]
     .filter((invoice) => invoice.status === 'overdue')
@@ -112,7 +196,7 @@ export function buildRecoverySummary(invoices: Invoice[], templates: typeof samp
 export function buildInvoiceToneGuide(settings: RecoverySettings): ToneGuide {
   return {
     subject: `Payment reminder — ${settings.tone} tone`,
-    body: `Keep the message respectful, direct, and focused on helping the client close the loop without pressure.`,
+    body: 'Keep the message respectful, direct, and focused on helping the client close the loop without pressure.',
     cta: `${settings.payNowCta.toLowerCase()} and mark the invoice as paid`,
   };
 }

@@ -2,7 +2,7 @@ import { sampleRecoverySettings } from '../../../lib/product';
 
 export default function SettingsPage() {
   return (
-    <main className="shell">
+    <main className="shell page-grid">
       <section className="frame hero">
         <p className="eyebrow">Settings</p>
         <h1>Set a tone that fits your brand.</h1>
@@ -20,6 +20,15 @@ export default function SettingsPage() {
           <h2>{sampleRecoverySettings.payNowCta}</h2>
           <p className="muted">Currency: {sampleRecoverySettings.currency}</p>
         </article>
+      </section>
+
+      <section className="card">
+        <p className="kicker">Recommended setup</p>
+        <ul className="list">
+          <li>Start with friendly reminders and escalate only if the invoice remains unpaid.</li>
+          <li>Use a clear pay-now link in every reminder.</li>
+          <li>Keep the brand voice consistent across email and dashboard copy.</li>
+        </ul>
       </section>
     </main>
   );
