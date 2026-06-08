@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import './globals.css';
 import { PROMISE, ROUTES, TITLE } from '../lib/product';
+import { withBasePath } from "@/lib/site-path";
 
 export const metadata = {
   title: {
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <div className="site-shell">
           <header className="topbar">
-            <Link className="brand" href="/">
+            <Link className="brand" href={withBasePath('/')}>
               <span className="brand-mark">PR</span>
               <span>
                 <strong>{TITLE}</strong>

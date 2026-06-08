@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { buildRecoveryPlan, buildRecoverySummary, buildReminderSequence, sampleInvoices, sampleRecoverySettings, sampleTemplates } from '../../lib/product';
+import { withBasePath } from "@/lib/site-path";
 
 const summary = buildRecoverySummary(sampleInvoices, sampleTemplates);
 const sequence = buildReminderSequence(sampleInvoices, sampleRecoverySettings);
@@ -14,10 +15,10 @@ export default function DashboardPage() {
           <h1>Get paid without chasing people all day.</h1>
           <p className="lead">Track overdue invoices, review reminder drafts, and keep the recovery queue moving from one clean workspace.</p>
           <div className="row">
-            <Link className="button" href="/app/invoices">
+            <Link className="button" href={withBasePath('/app/invoices')}>
               Review invoices
             </Link>
-            <Link className="ghost" href="/app/reminders">
+            <Link className="ghost" href={withBasePath('/app/reminders')}>
               Open reminders
             </Link>
           </div>

@@ -1,3 +1,4 @@
+import { withBasePath } from "@/lib/site-path";
 export default function LoginPage() {
   return (
     <main className="shell page-grid login-grid">
@@ -21,7 +22,7 @@ export default function LoginPage() {
             <button className="button" type="button">
               Continue
             </button>
-            <a className="ghost" href="/">
+            <a className="ghost" href={withBasePath('/')}>
               Back to home
             </a>
           </div>

@@ -12,6 +12,7 @@ import {
   sampleRecoverySettings,
   sampleTemplates,
 } from '../lib/product';
+import { withBasePath } from "@/lib/site-path";
 
 const summary = buildRecoverySummary(sampleInvoices, sampleTemplates);
 const reminders = buildReminderSequence(sampleInvoices, sampleRecoverySettings);
@@ -29,10 +30,10 @@ export default function HomePage() {
             and move cash flow forward without manual chasing.
           </p>
           <div className="row">
-            <Link className="button" href="/app">
+            <Link className="button" href={withBasePath('/app')}>
               Open dashboard
             </Link>
-            <Link className="ghost" href="/app/reminders">
+            <Link className="ghost" href={withBasePath('/app/reminders')}>
               Preview reminders
             </Link>
           </div>
@@ -133,10 +134,10 @@ export default function HomePage() {
             getting paid faster while keeping the client relationship intact.
           </p>
           <div className="row">
-            <Link className="button" href="/app/invoices">
+            <Link className="button" href={withBasePath('/app/invoices')}>
               Review invoices
             </Link>
-            <Link className="ghost" href="/app/templates">
+            <Link className="ghost" href={withBasePath('/app/templates')}>
               Browse templates
             </Link>
           </div>
