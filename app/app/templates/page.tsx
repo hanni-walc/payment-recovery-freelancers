@@ -1,18 +1,22 @@
-export default function RoutePage() {
+import { sampleTemplates } from '../../../lib/product';
+
+export default function TemplatesPage() {
   return (
     <main className="shell">
       <section className="frame hero">
-        <p className="eyebrow">Route</p>
-        <h1>Page scaffold</h1>
-        <p className="lead">This route exists so the repo is structurally complete and ready for a real backend implementation.</p>
-        <div className="row">
-          <a className="button" href="/app">Back to dashboard</a>
-          <a className="ghost" href="/">Open landing page</a>
-        </div>
+        <p className="eyebrow">Templates</p>
+        <h1>Choose the right tone for the right invoice.</h1>
+        <p className="lead">The template library keeps the follow-up human while still making payment feel urgent enough to act on.</p>
       </section>
-      <section className="card">
-        <p className="kicker">Implementation note</p>
-        <p className="muted">Replace this scaffold with route-specific behavior, forms, or detail views as the product is implemented.</p>
+
+      <section className="grid cols-2">
+        {sampleTemplates.map((template) => (
+          <article key={template.name} className="card">
+            <p className="kicker">{template.tone}</p>
+            <h2>{template.name}</h2>
+            <p className="muted">{template.subject}</p>
+          </article>
+        ))}
       </section>
     </main>
   );

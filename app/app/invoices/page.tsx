@@ -1,18 +1,31 @@
-export default function RoutePage() {
+import { sampleInvoices } from '../../../lib/product';
+
+export default function InvoicesPage() {
   return (
     <main className="shell">
       <section className="frame hero">
-        <p className="eyebrow">Route</p>
-        <h1>Page scaffold</h1>
-        <p className="lead">This route exists so the repo is structurally complete and ready for a real backend implementation.</p>
-        <div className="row">
-          <a className="button" href="/app">Back to dashboard</a>
-          <a className="ghost" href="/">Open landing page</a>
-        </div>
+        <p className="eyebrow">Invoices</p>
+        <h1>See what is due, overdue, and already recovered.</h1>
+        <p className="lead">A simple invoice board for freelancers who want a clear path from unpaid to paid.</p>
       </section>
+
       <section className="card">
-        <p className="kicker">Implementation note</p>
-        <p className="muted">Replace this scaffold with route-specific behavior, forms, or detail views as the product is implemented.</p>
+        <table className="table">
+          <thead>
+            <tr><th>Client</th><th>Project</th><th>Amount</th><th>Status</th><th>Days past due</th></tr>
+          </thead>
+          <tbody>
+            {sampleInvoices.map((invoice) => (
+              <tr key={invoice.id}>
+                <td><strong>{invoice.client}</strong></td>
+                <td>{invoice.project}</td>
+                <td>${invoice.amount}</td>
+                <td>{invoice.status}</td>
+                <td>{invoice.daysPastDue}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
     </main>
   );
